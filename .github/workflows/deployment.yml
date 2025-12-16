@@ -16,7 +16,7 @@ jobs:
       - run: docker run -e CI=true dsee07/docker-react-app npm test
 
       - name: Generate deployment package
-        run: zip -r deploy.zip . -exclude '*.git*' '*.github*' 'node_modules/*' 'tests/*'
+        run: zip -r deploy.zip . -exclude '*.git*'
       
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v20

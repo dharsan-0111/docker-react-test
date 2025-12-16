@@ -25,9 +25,6 @@ jobs:
       - name: List contents of zip file
         run: unzip -l deploy.zip | grep Dockerfile
       
-      - name: Compress deployment package with gzip
-        run: gzip -9 deploy.zip
-      
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v20
         with:
@@ -36,7 +33,7 @@ jobs:
           existing_bucket_name: elasticbeanstalk-us-east-1-590765960913
           region: us-east-1
           version_label: ${{ github.sha }}
-          deployment_package: deploy.zip.gz
+          deployment_package: deploy.zip
           use_existing_version_if_available: true
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

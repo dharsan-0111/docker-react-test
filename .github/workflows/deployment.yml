@@ -14,6 +14,7 @@ jobs:
       - run: echo ${{ secrets.DOCKERHUB_PAT }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
       - run: docker build -t dsee07/docker-react-app -f Dockerfile.dev .
       - run: docker run -e CI=true dsee07/docker-react-app npm test
+      - run: docker build -t dsee07/docker-react-app -f Dockerfile .
 
       - name: Generate deployment package
         run: zip -r deploy.zip . -x '*.git*' '*.github*' 'node_modules/*'

@@ -14,3 +14,18 @@ jobs:
       - run: echo ${{ secrets.DOCKERHUB_PAT }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
       - run: docker build -t dsee07/docker-react-app -f Dockerfile.dev .
       - run: docker run -e CI=true dsee07/docker-react-app npm test
+
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -exclude '*.git*' '*.github*' 'node_modules/*' 'tests/*'
+      
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          application_name: docker-react-app
+          environment_name: Docker-react-app-env
+          existing_bucket_name: elasticbeanstalk-us-east-1-590765960913
+          region: us-east-1
+          version_label: ${{ github.sha }}
+          deployment_package: deploy.zip
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
